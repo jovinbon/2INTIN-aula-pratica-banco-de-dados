@@ -57,7 +57,7 @@ SELECT name FROM product;
 SELECT * FROM category;
 
 
---SELEÇÃO PARA TRAZER OS PRODUTOS COM AS CATEGORIAS
+--SELEÇÃO PARA TRAZER OS PRODUTOS COM AS CATEGORIAS UTILIZANDO O INNER JOIN (JUNÇÂO DE TABELAS EM QUE A id DO PRODUTO SEJA IGUAL AO DE CATEGORIA)
 SELECT p.qtde as quantidade, c.name as categoria
 FROM product p
 INNER JOIN product_category result on p.id = result.id_product
