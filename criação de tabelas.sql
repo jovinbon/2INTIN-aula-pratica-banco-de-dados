@@ -196,7 +196,96 @@ SELECT matricula, nome FROM Empregado
 WHERE cod_departamento=2 AND salario > 3000.0;
 
 
+/*------------------- UNION --------------------*/
+
+SELECT matricula FROM empregado
+UNION
+SELECT mat_gerente FROM departamento
+
+
+SELECT id, matricula FROM empregado
+UNION
+SELECT id, mat_empregado FROM dependente
+UNION
+SELECT id, mat_empregado FROM trabalha_projeto
+
+SELECT id FROM projeto
+UNION
+SELECT id FROM trabalha_projeto
+
+SELECT nome, salario
+FROM empregado
+UNION
+SELECT 'z_SalarioTotal:', SUM(salario)
+FROM empregado;
+
+
+/*------------------- INTERSECT --------------------*/
+
+SELECT matricula, nome as gerente
+FROM empregado 
+LEFT JOIN departamento
+ON empregado.matricula = departamento.mat_gerente
+INTERSECT
+SELECT matricula, nome
+FROM empregado 
+RIGHT JOIN departamento
+ON empregado.matricula = departamento.mat_gerente;
+
+
+SELECT matricula, nome as pai_ou_mae
+FROM empregado 
+LEFT JOIN dependente
+ON empregado.matricula = dependente.mat_empregado
+INTERSECT
+SELECT matricula, nome
+FROM empregado 
+RIGHT JOIN dependente
+ON empregado.matricula = dependente.mat_empregado;
 
 
 
 
+create table bonus (
+  id SERIAL,
+  empregado_id INTEGER,
+  valor FLOAT
+);
+
+INSERT INTO bonus (empregado_id, valor) VALUES (2, 300.0);
+INSERT INTO bonus (empregado_id, valor) VALUES (4, 300.0);
+INSERT INTO bonus (empregado_id, valor) VALUES (6, 200.0);
+
+
+SELECT matricula, nome, valor as bonus
+FROM empregado 
+LEFT JOIN bonus
+ON empregado.id = bonus.empregado_id
+INTERSECT
+SELECT matricula, nome, valor
+FROM empregado 
+RIGHT JOIN bonus
+ON empregado.id = bonus.empregado_id;
+
+
+*------------------- EXCEPT --------------------*/
+
+SELECT matricula, nome, valor as bonus
+FROM empregado 
+LEFT JOIN bonus
+ON empregado.id = bonus.empregado_id
+EXCEPT
+SELECT matricula, nome, valor
+FROM empregado 
+RIGHT JOIN bonus
+ON empregado.id = bonus.empregado_id;
+
+SELECT cod_departamento
+FROM departamento 
+LEFT JOIN projeto
+ON departamento.id = projeto.cod_departamento
+EXCEPT
+SELECT cod_departamento
+FROM departamento 
+RIGHT JOIN projeto
+ON departamento.id = projeto.cod_departamento;
